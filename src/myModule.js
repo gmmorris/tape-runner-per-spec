@@ -1,4 +1,4 @@
-import jQuery from 'jQuery';
+import jQuery from 'jquery';
 
 export const inc = n => n + 1;
 
