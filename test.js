@@ -34,6 +34,11 @@ const runTests = (sourceSpec) => {
     .transform("babelify", {presets: ["es2015"]})
     .bundle()
     .pipe(tapeRun())
+    .on('results', results => {
+      if (!results.ok) {
+        process.exit(1);
+      }
+    })
     .pipe(process.stdout);
 }
 
