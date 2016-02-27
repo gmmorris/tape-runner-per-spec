@@ -3,7 +3,7 @@ import { inc,addToPage } from '../src/myModule';
 import $ from 'jquery';
 
 test('it should increment', function (t) {
-  t.ok(inc(2) === 3);
+  t.ok(inc(2) === 1);
   t.notOk(inc(2) === 2);
   t.end();
 });
