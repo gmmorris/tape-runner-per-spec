@@ -1,0 +1,26 @@
+{
+  "name": "electron-based-testing",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "babel src --presets babel-preset-es2015 --out-dir dist",
+    "test": "babel-node test.js ./test/**/*.spec.js",
+    "testBrowser": "browserify -t babelify test/*.spec.js | browser-run -p 2222",
+    "testElectron": "browserify -t babelify test/myModule.spec.js test/myOtherModule.spec.js | tape-run | faucet",
+    "testChrome": "browserify -t babelify test/*.spec.js | tape-run -b chrome | faucet"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel": "^6.5.2",
+    "babel-cli": "^6.5.1",
+    "babel-preset-es2015": "^6.5.0",
+    "babelify": "^7.2.0",
+    "browserify": "^13.0.0",
+    "faucet": "0.0.1",
+    "glob-fs": "^0.1.6",
+    "jquery": "^2.2.1",
+    "tape": "^4.4.0",
+    "tape-run": "^2.1.3"
+  }
+}
