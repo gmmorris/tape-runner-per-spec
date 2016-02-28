@@ -2,10 +2,11 @@
 var browserify = require('browserify');
 var tapeRun = require('tape-run');
 var babelify = require('babelify');
-var glob = require('glob-fs')({ gitignore: true });
+var glob = require('glob');
 
 //utils
 const either = (value, left, right)  => value? right(value) : left(value)
+const identity = i => i
 const compose = (f, ...fns) => {
   if (fns.length == 1) {
     const g = fns.pop();
@@ -21,13 +22,17 @@ const reducefn = (fn, init) => (arr) => arr.reduce(fn, init)
 
 // test script fns
 const extractSpecFileMatchFromArgs = argv => {
-  let [,,specFile] = process.argv;
-  return specFile;
+  let [,,...specFiles] = argv;
+  return specFiles && specFiles.length? specFiles : false;
 }
 
 const invalidInput = () => console.log('No valid Spec file has been supplied to the test runner')
 const noSpecFilesFound = () => console.log('No valid Spec files were found')
-const matchFiles = specFileMatch => glob.readdirPromise(specFileMatch)
+const matchFiles = specFileMatch => new Promise((resolve, reject) => {
+  glob(specFileMatch, function (er, files) {
+    er? reject(er) : resolve(files);
+  })
+})
 
 const runTests = (sourceSpec) => {
   browserify(sourceSpec)
@@ -46,16 +51,10 @@ const parseSpecMatch = specFileMatch => {
   matchFiles(specFileMatch)
     .then(
       rcompose(
-        files => {
-          if(files && files.length){
-            return files;
-          }
-          noSpecFilesFound();
-          return [];
-        },
+        files => either(files && files.length? files : false, noSpecFilesFound,identity),
         mapfn(runTests)
       ),
       err => console.log(err));
 }
 
-either(extractSpecFileMatchFromArgs(process.argv), invalidInput, parseSpecMatch);
+either(extractSpecFileMatchFromArgs(process.argv), invalidInput, mapfn(parseSpecMatch));
