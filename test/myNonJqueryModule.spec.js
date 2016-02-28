@@ -1,5 +1,8 @@
 import { test } from 'tape';
+import { describe } from './testUtils';
 import { dup } from '../src/myNonJqueryModule';
+
+describe('This is like another describe');
 
 test('it should duplicate', function (t) {
   t.ok(dup(2, 5) === 10);

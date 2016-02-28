@@ -1,6 +1,9 @@
 import { test } from 'tape';
+import { describe } from './testUtils';
 import { dec, findOnPage } from '../src/myOtherModule';
 import $ from 'jquery';
+
+describe('And one more describe');
 
 test('it should decrement', function (t) {
   t.ok(dec(2) === 1, 'Decrement 2 to 1');
