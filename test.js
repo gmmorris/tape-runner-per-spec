@@ -3,6 +3,7 @@ var browserify = require('browserify');
 var tapeRun = require('tape-run');
 var babelify = require('babelify');
 var glob = require('glob');
+const tapSpec = require('tap-diff');
 
 //utils
 const either = (value, left, right)  => value? right(value) : left(value)
@@ -44,6 +45,7 @@ const runTests = (sourceSpec) => {
         process.exit(1);
       }
     })
+    .pipe(tapSpec())
     .pipe(process.stdout);
 }
 
